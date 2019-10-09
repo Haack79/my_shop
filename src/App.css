@@ -1,3 +1,14 @@
 body {
     font-family: 'Open Sans Condensed';
 }
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    color: blue;
+    size: 15px; 
+}
+* {
+    box-sizing: border-box;
+}
