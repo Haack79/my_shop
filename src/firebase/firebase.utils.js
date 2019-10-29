@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+// sagas import { ObjectUnsubscribedError } from 'rxjs';
 
 var config = {
   apiKey: "AIzaSyAmUVaIO-KC8c8rO6yJ45wPbTp6CxYpxeI",
@@ -66,12 +67,19 @@ export const convertCollectionsSnapshotToMap = collectionsSnapshot => {
     return accumulator;
   }, {});
 };
-
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe(); 
+      resolve(userAuth); 
+    }, reject)
+  })
+}
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
 
 export default firebase;
