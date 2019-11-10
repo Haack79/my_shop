@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -17,13 +17,15 @@ import Header from './components/header/header.component';
 //  sagas now import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
-
-class App extends React.Component {
-  unsubscribeFromAuth = null;
-
-  componentDidMount() {
-    const { checkUserSession } = this.props;
-    checkUserSession(); 
+// cause doing simple thing going to move to hook from class App component to functional component 
+const App = ({ checkUserSession, currentUser }) => {
+  useEffect(() => {
+    checkUserSession()
+  });
+  // unsubscribeFromAuth = null;
+  // componentDidMount({ checkUserSession }) {
+  //   const { checkUserSession } = this.props;
+    // checkUserSession(); 
     // const { setCurrentUser } = this.props;
     // this user auth goign to sagas
     // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
@@ -40,13 +42,13 @@ class App extends React.Component {
 
     //   setCurrentUser(userAuth);
     // });
-  }
+  // }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
+  // componentWillUnmount() {
+  //   this.unsubscribeFromAuth();
+  // }
 
-  render() {
+
     return (
       <div>
         <Header />
@@ -58,7 +60,7 @@ class App extends React.Component {
             exact
             path='/signin'
             render={() =>
-              this.props.currentUser ? (
+              currentUser ? (
                 <Redirect to='/' />
               ) : (
                 <SignInAndSignUpPage />
@@ -69,7 +71,7 @@ class App extends React.Component {
       </div>
     );
   }
-}
+
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
